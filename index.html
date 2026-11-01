@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AirPod — Wireless Earbuds</title>
+<meta name="description" content="AirPod wireless earbuds. Up to 20 hours of listening time with a single charge." />
+<link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg" />
+<link rel="icon" type="image/png" sizes="64x64" href="assets/icons/favicon.png" />
+<link rel="apple-touch-icon" href="assets/icons/favicon.png" />
+<meta property="og:title" content="AirPod — Wireless Earbuds" />
+<meta property="og:description" content="Up to 20 hours of listening time with a single charge." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="assets/images/og-preview.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="AirPod — Wireless Earbuds" />
+<meta name="twitter:description" content="Up to 20 hours of listening time with a single charge." />
+<meta name="twitter:image" content="assets/images/og-preview.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<style>
+  :root {
+    --bg: #000000;
+    --bg-soft: #0a0a0a;
+    --surface: #141414;
+    --surface-2: #1c1c1e;
+    --ink: #f5f5f7;
+    --ink-soft: #a1a1a6;
+    --ink-mute: #6e6e73;
+    --accent: #ffffff;
+    --glow: rgba(255,255,255,0.35);
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  html, body { height: 100%; }
+  html.lenis { height: auto; scroll-behavior: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+  img { display: block; max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    height: 100vh;
+    height: 100svh;
+    min-height: 720px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 40px 24px 60px;
+    background: radial-gradient(ellipse 80% 60% at 50% 40%, #1a1a1a 0%, #050505 55%, #000 100%);
+  }
+  .hero-top {
+    text-align: center;
+    z-index: 5;
+    will-change: transform, opacity;
+  }
+  .hero-eyebrow {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+  }
+  .hero-title {
+    margin-top: 18px;
+    font-size: clamp(64px, 14vw, 200px);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+    background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.35) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    will-change: transform, opacity;
+  }
+  .hero-bottom {
+    text-align: center;
+    z-index: 5;
+    will-change: transform, opacity;
+  }
+  .hero-sub {
+    font-size: clamp(15px, 1.6vw, 20px);
+    color: var(--ink-soft);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+  .hero-canvas-wrap {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+  #hero-canvas { width: 100%; height: 100%; display: block; }
+  .hero-orbs {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.5;
+    will-change: transform;
+  }
+  .orb-1 { width: 320px; height: 320px; left: 12%; top: 20%; background: radial-gradient(circle, rgba(255,255,255,0.18), transparent 70%); }
+  .orb-2 { width: 260px; height: 260px; right: 10%; top: 30%; background: radial-gradient(circle, rgba(255,255,255,0.12), transparent 70%); }
+  .orb-3 { width: 400px; height: 400px; left: 50%; bottom: -10%; transform: translateX(-50%); background: radial-gradient(circle, rgba(255,255,255,0.08), transparent 70%); }
+  .particles { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+  .particle {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: #fff;
+    border-radius: 50%;
+    opacity: 0.6;
+    animation: floatP 6s ease-in-out infinite;
+  }
+  @keyframes floatP {
+    0%,100% { transform: translateY(0); opacity: 0.4; }
+    50% { transform: translateY(-18px); opacity: 0.9; }
+  }
+
+  /* ---------- Sections ---------- */
+  section { position: relative; }
+  .container { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
+  @media (max-width: 768px) { .container { padding: 0 20px; } }
+
+  /* Features */
+  .features {
+    padding: 160px 0 140px;
+    background: var(--bg);
+  }
+  .features-head { max-width: 720px; margin-bottom: 80px; }
+  .features-head h2 {
+    font-size: clamp(40px, 6vw, 72px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+  .features-head p {
+    margin-top: 24px;
+    font-size: 19px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    max-width: 520px;
+  }
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  @media (max-width: 900px) { .features-grid { grid-template-columns: 1fr; } }
+  .feature-card {
+    background: var(--surface);
+    border-radius: 24px;
+    padding: 40px 32px;
+    transition: transform .4s var(--ease), border-color .4s var(--ease), background .4s var(--ease);
+    will-change: transform, opacity;
+  }
+  .feature-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(255,255,255,0.14);
+    background: var(--surface-2);
+  }
+  .feature-icon {
+    width: 48px; height: 48px;
+    display: grid; place-items: center;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.06);
+    margin-bottom: 28px;
+  }
+  .feature-icon svg { width: 24px; height: 24px; stroke: #fff; fill: none; stroke-width: 1.6; }
+  .feature-card h3 {
+    font-size: 22px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 12px;
+  }
+  .feature-card p { font-size: 16px; color: var(--ink-soft); line-height: 1.6; }
+
+  /* Battery */
+  .battery {
+    padding: 180px 0;
+    background: radial-gradient(ellipse 70% 50% at 50% 50%, #0f0f0f 0%, #000 100%);
+    text-align: center;
+    overflow: hidden;
+  }
+  .battery-num {
+    font-size: clamp(120px, 22vw, 320px);
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    line-height: 0.9;
+    background: linear-gradient(180deg, #fff 0%, #6e6e73 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .battery-label {
+    margin-top: 24px;
+    font-size: clamp(18px, 2vw, 24px);
+    color: var(--ink-soft);
+    font-weight: 400;
+  }
+  .battery-sub {
+    margin-top: 40px;
+    font-size: 16px;
+    color: var(--ink-mute);
+    max-width: 460px;
+    margin-left: auto; margin-right: auto;
+    line-height: 1.6;
+  }
+
+  /* Sound / ANC */
+  .sound {
+    padding: 160px 0;
+    background: var(--bg-soft);
+  }
+  .sound-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+  @media (max-width: 900px) { .sound-grid { grid-template-columns: 1fr; gap: 40px; } }
+  .sound h2 {
+    font-size: clamp(40px, 6vw, 72px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+  .sound p {
+    margin-top: 24px;
+    font-size: 19px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    max-width: 480px;
+  }
+  .wave-wrap {
+    position: relative;
+    height: 260px;
+    border-radius: 24px;
+    background: var(--surface);
+    overflow: hidden;
+  }
+  .wave-wrap canvas { width: 100%; height: 100%; display: block; }
+
+  /* CTA */
+  .cta {
+    padding: 180px 0 120px;
+    text-align: center;
+    background: radial-gradient(ellipse 60% 40% at 50% 60%, #1a1a1a 0%, #000 100%);
+  }
+  .cta h2 {
+    font-size: clamp(44px, 7vw, 96px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.0;
+  }
+  .cta p {
+    margin-top: 24px;
+    font-size: 19px;
+    color: var(--ink-soft);
+  }
+  .buy-btn {
+    margin-top: 48px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 40px;
+    border-radius: 999px;
+    background: #fff;
+    color: #000;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    box-shadow: 0 0 0 0 rgba(255,255,255,0.4), 0 0 60px 0 rgba(255,255,255,0.15);
+    transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+    position: relative;
+    overflow: hidden;
+  }
+  .buy-btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 0 0 4px rgba(255,255,255,0.12), 0 0 80px 8px rgba(255,255,255,0.25);
+  }
+  .buy-btn:active { transform: translateY(0) scale(0.98); }
+  .buy-glow {
+    position: absolute;
+    inset: -40%;
+    background: radial-gradient(circle, rgba(255,255,255,0.4), transparent 60%);
+    opacity: 0;
+    transition: opacity .4s;
+    pointer-events: none;
+  }
+  .buy-btn:hover .buy-glow { opacity: 1; }
+
+  /* Footer */
+  footer {
+    padding: 60px 0 40px;
+    color: var(--ink-soft);
+    font-size: 13px;
+  }
+  .footer-row {
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+  }
+  .footer-brand { font-size: 18px; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; }
+
+  /* Nav */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    padding: 20px 32px;
+    display: flex; justify-content: space-between; align-items: center;
+    backdrop-filter: blur(0px);
+    transition: background .3s;
+  }
+  nav.scrolled { background: rgba(0,0,0,0.6); backdrop-filter: blur(20px); }
+  .nav-brand { font-weight: 700; font-size: 17px; letter-spacing: -0.02em; }
+  .nav-links { display: flex; gap: 28px; font-size: 14px; color: var(--ink-soft); }
+  .nav-links a:hover { color: var(--ink); }
+  @media (max-width: 768px) { .nav-links { display: none; } }
+
+  /* reveal helpers */
+  .reveal { opacity: 0; transform: translateY(32px); }
+  .reveal-x { opacity: 0; transform: translateX(-32px); }
+
+  /* reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .particle { animation: none; }
+    .reveal, .reveal-x { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-brand">AirPod</div>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#battery">Battery</a>
+    <a href="#sound">Sound</a>
+    <a href="#buy">Buy</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-orbs">
+    <div class="orb orb-1" data-parallax="0.3"></div>
+    <div class="orb orb-2" data-parallax="0.5"></div>
+    <div class="orb orb-3" data-parallax="0.15"></div>
+  </div>
+  <div class="particles" id="particles"></div>
+  <div class="hero-canvas-wrap">
+    <canvas id="hero-canvas"></canvas>
+  </div>
+
+  <div class="hero-top" data-parallax="-0.15">
+    <div class="hero-eyebrow">New Arrival</div>
+  </div>
+
+  <div class="hero-title-wrap" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:4;">
+    <h1 class="hero-title" data-parallax="-0.08">AirPod</h1>
+  </div>
+
+  <div class="hero-bottom" data-parallax="0.2">
+    <p class="hero-sub">Up to 20 hours of listening time with a single charge</p>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="container">
+    <div class="features-head reveal">
+      <h2>Designed to disappear.</h2>
+      <p>Built to perform. Every detail refined for comfort, clarity, and daily use.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3"/></svg>
+        </div>
+        <h3>Active Noise Cancellation</h3>
+        <p>Immersive silence. Blocks the world so only your music remains.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+        <h3>Adaptive Audio</h3>
+        <p>Seamlessly blends noise cancellation and transparency as you move.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        </div>
+        <h3>All-Day Battery</h3>
+        <p>20 hours of listening. A quick 5-minute charge gives an hour back.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BATTERY -->
+<section class="battery" id="battery">
+  <div class="container">
+    <div class="battery-num" id="battery-num">0h</div>
+    <div class="battery-label">of listening time</div>
+    <p class="battery-sub">A single charge carries you through the longest days. The case holds four more.</p>
+  </div>
+</section>
+
+<!-- SOUND -->
+<section class="sound" id="sound">
+  <div class="container">
+    <div class="sound-grid">
+      <div>
+        <h2 class="reveal">Sound that<br/>moves with you.</h2>
+        <p class="reveal">Custom high-excursion drivers deliver deep bass and crisp highs, tuned for every track.</p>
+      </div>
+      <div class="wave-wrap reveal">
+        <canvas id="wave-canvas"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="buy">
+  <div class="container">
+    <h2 class="reveal">Hear everything.</h2>
+    <p class="reveal">Feel nothing else. AirPod — available now.</p>
+    <button class="buy-btn reveal" id="buy-btn">
+      <span class="buy-glow"></span>
+      Buy Now
+    </button>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-row">
+      <div class="footer-brand">AirPod</div>
+      <div>© 2026 AirPod. All rights reserved.</div>
+    </div>
+  </div>
+</footer>
+
+<script type="module">
+  import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160/build/three.module.js';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // ---------- Lenis ----------
+  const lenis = new Lenis({ lerp: 0.1, smoothWheel: true, wheelMultiplier: 1, touchMultiplier: 1.2 });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => lenis.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
+
+  // ---------- Nav scrolled ----------
+  const nav = document.getElementById('nav');
+  lenis.on('scroll', ({ scroll }) => {
+    nav.classList.toggle('scrolled', scroll > 40);
+  });
+
+  // ---------- Particles ----------
+  const pWrap = document.getElementById('particles');
+  for (let i = 0; i < 28; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.top = Math.random() * 100 + '%';
+    p.style.animationDelay = (Math.random() * 6) + 's';
+    p.style.animationDuration = (4 + Math.random() * 4) + 's';
+    pWrap.appendChild(p);
+  }
+
+  // ---------- Parallax layers ----------
+  const parallaxEls = document.querySelectorAll('[data-parallax]');
+  parallaxEls.forEach(el => {
+    const speed = parseFloat(el.getAttribute('data-parallax'));
+    gsap.to(el, {
+      yPercent: speed * 100,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#hero',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true
+      }
+    });
+  });
+
+  // ---------- Hero 3D ----------
+  const canvas = document.getElementById('hero-canvas');
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
+  camera.position.set(0, 0.4, 6);
+
+  // Lighting
+  const ambient = new THREE.AmbientLight(0xffffff, 0.35);
+  scene.add(ambient);
+  const key = new THREE.DirectionalLight(0xffffff, 1.1);
+  key.position.set(3, 4, 5);
+  scene.add(key);
+  const rim = new THREE.DirectionalLight(0xffffff, 0.6);
+  rim.position.set(-4, 2, -3);
+  scene.add(rim);
+  const spot = new THREE.SpotLight(0xffffff, 1.2, 20, Math.PI/6, 0.4);
+  spot.position.set(0, 6, 2);
+  scene.add(spot);
+
+  // Materials
+  const caseMat = new THREE.MeshPhysicalMaterial({
+    color: 0x1c1c1e, metalness: 0.85, roughness: 0.35, clearcoat: 0.6, clearcoatRoughness: 0.2
+  });
+  const lidMat = new THREE.MeshPhysicalMaterial({
+    color: 0x2a2a2e, metalness: 0.85, roughness: 0.3, clearcoat: 0.7
+  });
+  const budMat = new THREE.MeshPhysicalMaterial({
+    color: 0xf2f2f2, metalness: 0.1, roughness: 0.25, clearcoat: 1.0
+  });
+  const stemMat = new THREE.MeshPhysicalMaterial({
+    color: 0xe8e8ea, metalness: 0.15, roughness: 0.2, clearcoat: 1.0
+  });
+
+  // Case body (capsule for pill shape)
+  const caseGroup = new THREE.Group();
+  const bodyGeo = new THREE.CapsuleGeometry(0.42, 1.76, 16, 32);
+  const body = new THREE.Mesh(bodyGeo, caseMat);
+  body.rotation.z = Math.PI / 2;
+  body.position.y = -0.2;
+  caseGroup.add(body);
+
+  // Lid (hinged at back)
+  const lidGroup = new THREE.Group();
+  lidGroup.position.set(0, 0.15, -0.45); // hinge at back
+  const lidGeo = new THREE.CapsuleGeometry(0.42, 1.76, 8, 24);
+  const lid = new THREE.Mesh(lidGeo, lidMat);
+  lid.rotation.z = Math.PI / 2;
+  lid.position.set(0, 0, 0.45); // offset so hinge at one end
+  lid.scale.y = 0.28; // flatten into a lid
+  lidGroup.add(lid);
+  caseGroup.add(lidGroup);
+
+  // Earbuds
+  function makeBud() {
+    const g = new THREE.Group();
+    const bud = new THREE.Mesh(new THREE.SphereGeometry(0.32, 32, 32), budMat);
+    bud.scale.set(1, 0.85, 0.9);
+    g.add(bud);
+    const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.11, 1.0, 16), stemMat);
+    stem.position.set(0.18, -0.62, 0);
+    stem.rotation.z = -0.25;
+    g.add(stem);
+    const tip = new THREE.Mesh(new THREE.SphereGeometry(0.1, 16, 16), budMat);
+    tip.position.set(0.3, -1.05, 0);
+    g.add(tip);
+    return g;
+  }
+  const leftBud = makeBud();
+  const rightBud = makeBud();
+  leftBud.position.set(-0.7, 0.6, 0);
+  rightBud.position.set(0.7, 0.6, 0);
+  leftBud.rotation.z = 0.15;
+  rightBud.rotation.z = -0.15;
+  caseGroup.add(leftBud, rightBud);
+
+  scene.add(caseGroup);
+
+  // Initial open state: lid up
+  lidGroup.rotation.x = -Math.PI / 2.1;
+
+  // Floating base positions
+  const baseLeft = { x: -0.7, y: 0.6, z: 0.2 };
+  const baseRight = { x: 0.7, y: 0.6, z: 0.2 };
+
+  // Mouse parallax
+  let mx = 0, my = 0;
+  window.addEventListener('mousemove', (e) => {
+    mx = (e.clientX / window.innerWidth - 0.5) * 2;
+    my = (e.clientY / window.innerHeight - 0.5) * 2;
+  });
+
+  function resize() {
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  const ro = new ResizeObserver(resize);
+  ro.observe(canvas.parentElement);
+  resize();
+
+  // Scroll progress for hero transition
+  const heroEl = document.getElementById('hero');
+  function heroProgress() {
+    const rect = heroEl.getBoundingClientRect();
+    const h = heroEl.offsetHeight;
+    const scrolled = -rect.top;
+    return Math.max(0, Math.min(1, scrolled / h));
+  }
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let t = 0;
+  function animate() {
+    requestAnimationFrame(animate);
+    t += 0.016;
+    const p = reduced ? 0 : heroProgress();
+
+    // Floating
+    const floatY = reduced ? 0 : Math.sin(t * 1.2) * 0.08;
+    caseGroup.position.y = floatY;
+
+    // Mouse parallax (subtle)
+    caseGroup.rotation.y = mx * 0.15;
+    caseGroup.rotation.x = my * 0.08;
+
+    // Lid animation: close then open with different angle
+    // phases: 0-0.35 close; 0.35-0.55 closed; 0.55-1 open (to -PI/2.6)
+    let lidAngle;
+    if (p < 0.35) {
+      const k = p / 0.35;
+      lidAngle = -Math.PI/2.1 + (Math.PI/2.1) * k; // to 0
+    } else if (p < 0.55) {
+      lidAngle = 0;
+    } else {
+      const k = (p - 0.55) / 0.45;
+      lidAngle = -Math.PI/2.6 * k; // open (slightly different angle)
+    }
+    lidGroup.rotation.x = lidAngle;
+
+    // Earbuds emerge when open
+    const openFactor = p < 0.55 ? Math.max(0, 1 - p/0.35) : Math.min(1, (p-0.55)/0.45);
+    // when closed, buds go inside (lower y); when open, rise
+    const budY = 0.15 + openFactor * 0.45 + Math.sin(t*1.2)*0.02;
+    leftBud.position.y = budY;
+    rightBud.position.y = budY;
+    leftBud.position.x = -0.7 + (1-openFactor)*0.1;
+    rightBud.position.x = 0.7 - (1-openFactor)*0.1;
+
+    // Camera orbit as scroll progresses
+    const angle = p * 0.6;
+    camera.position.x = Math.sin(angle) * 1.6;
+    camera.position.z = 6 - p * 1.2;
+    camera.position.y = 0.4 + p * 0.6;
+    camera.lookAt(0, 0, 0);
+
+    // Lighting shift
+    key.intensity = 1.1 + p * 0.4;
+    rim.intensity = 0.6 + p * 0.8;
+
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  // ---------- Battery counter ----------
+  const batteryNum = document.getElementById('battery-num');
+  ScrollTrigger.create({
+    trigger: '#battery',
+    start: 'top 70%',
+    onEnter: () => {
+      if (reduced) { batteryNum.textContent = '20h'; return; }
+      let v = 0;
+      const target = 20;
+      const dur = 1400;
+      const start = performance.now();
+      function step(now) {
+        const t = Math.min(1, (now - start) / dur);
+        const eased = 1 - Math.pow(1 - t, 3);
+        v = Math.round(target * eased);
+        batteryNum.textContent = v + 'h';
+        if (t < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    },
+    once: true
+  });
+
+  // ---------- Wave canvas ----------
+  const waveCanvas = document.getElementById('wave-canvas');
+  const wctx = waveCanvas.getContext('2d');
+  function resizeWave() {
+    const dpr = Math.min(window.devicePixelRatio, 2);
+    const r = waveCanvas.getBoundingClientRect();
+    waveCanvas.width = r.width * dpr;
+    waveCanvas.height = r.height * dpr;
+    wctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resizeWave();
+  window.addEventListener('resize', resizeWave);
+  let wt = 0;
+  function drawWave() {
+    requestAnimationFrame(drawWave);
+    const r = waveCanvas.getBoundingClientRect();
+    const W = r.width, H = r.height;
+    wctx.clearRect(0, 0, W, H);
+    const lines = 5;
+    for (let i = 0; i < lines; i++) {
+      const phase = i * 0.7;
+      const amp = 18 + i * 6;
+      const freq = 0.012 + i * 0.004;
+      const speed = 0.02 + i * 0.005;
+      const baseY = H / 2 + (i - (lines-1)/2) * 18;
+      const alpha = 0.35 - i * 0.05;
+      wctx.beginPath();
+      for (let x = 0; x <= W; x += 2) {
+        const y = baseY + Math.sin(x * freq + wt * speed * 60 + phase) * amp;
+        if (x === 0) wctx.moveTo(x, y); else wctx.lineTo(x, y);
+      }
+      wctx.strokeStyle = `rgba(255,255,255,${alpha})`;
+      wctx.lineWidth = 1.2;
+      wctx.stroke();
+    }
+    wt += 0.016;
+  }
+  drawWave();
+
+  // ---------- Scroll reveals ----------
+  if (!reduced) {
+    gsap.utils.toArray('.reveal').forEach((el, i) => {
+      gsap.fromTo(el, { opacity: 0, y: 32 }, {
+        opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 85%', once: true }
+      });
+    });
+  } else {
+    document.querySelectorAll('.reveal').forEach(el => { el.style.opacity = 1; el.style.transform = 'none'; });
+  }
+
+  // ---------- Hero entrance ----------
+  if (!reduced) {
+    gsap.from('.hero-eyebrow', { opacity: 0, y: -16, duration: 0.8, delay: 0.2, ease: 'power3.out' });
+    gsap.from('.hero-title', { opacity: 0, y: 40, scale: 0.96, duration: 1.2, delay: 0.35, ease: 'power3.out' });
+    gsap.from('.hero-sub', { opacity: 0, y: 16, duration: 0.9, delay: 0.7, ease: 'power3.out' });
+    gsap.from('.orb', { opacity: 0, scale: 0.6, duration: 1.6, stagger: 0.15, ease: 'power2.out' });
+    gsap.from('.nav-brand', { opacity: 0, y: -12, duration: 0.8, delay: 0.1, ease: 'power3.out' });
+    gsap.from('.footer-brand', { opacity: 0, y: 12, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: 'footer', start: 'top 90%' } });
+  }
+
+  // ---------- Buy button ripple/glow already via CSS ----------
+</script>
+</body>
+</html>
